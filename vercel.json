@@ -1,0 +1,23 @@
+{
+    "build": {
+      "env": {
+        "DATABASE_URL": "your-database-url"
+      }
+    },
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/$1"
+      }
+    ],
+    "hooks": {
+      "build": "npm run build && npx prisma generate"
+    }
+  }
+  

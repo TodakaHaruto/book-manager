@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && prisma generate",
+    "vercel-build": "prisma generate && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "rm -rf node_modules && rm -rf package-lock.json && npm install",
-    "vercel-build": "prisma generate && next build"
+    "clean": "rm -rf node_modules && rm -rf package-lock.json && npm install"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

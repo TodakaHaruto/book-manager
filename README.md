@@ -16,12 +16,13 @@ javascript<br>
 読書済みの書籍やこれから読みたい本を記録することができるアプリです。<br>
 <br>
 ## 環境<br>
-| ------------- | ---------|<br>
-| next.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;14.2.5&nbsp;&nbsp;&nbsp;|<br>
-| node.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;20.14.10&nbsp;|<br>
-| React&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
-| prisma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;5.16.2&nbsp;&nbsp;&nbsp;|<br>
-| tailwindcss&nbsp;&nbsp;&nbsp;|&nbsp;3.4.1&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+
+| ------------- | ---------|
+| next.js | 14.2.5 |
+| node.js | 20.14.10 |
+| React | 18 |
+| prisma | 5.16.2 |
+| tailwindcss | 3.4.1 |
 <br>
 <br>
 ## ディレクトリ構成<br>

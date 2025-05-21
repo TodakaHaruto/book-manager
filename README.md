@@ -17,11 +17,11 @@ javascript<br>
 <br>
 ## 環境<br>
 | ------------- | ---------|<br>
-| next.js       | 14.2.5   |<br>
-| node.js       | 20.14.10 |<br>
-| React         | 18       |<br>
-| prisma        | 5.16.2   |<br>
-| tailwindcss   | 3.4.1    |<br>
+| next.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;14.2.5&nbsp;&nbsp;&nbsp;|<br>
+| node.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;20.14.10&nbsp;|<br>
+| React&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+| prisma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;5.16.2&nbsp;&nbsp;&nbsp;|<br>
+| tailwindcss&nbsp;&nbsp;&nbsp;|&nbsp;3.4.1&nbsp;&nbsp;&nbsp;&nbsp;|<br>
 <br>
 <br>
 ## ディレクトリ構成<br>

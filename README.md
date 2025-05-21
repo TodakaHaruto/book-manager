@@ -28,29 +28,31 @@ javascript<br>
 <br>
 ## ディレクトリ構成<br>
 <br>
-.<br>
-├── .DS_Store<br>
-├── .env<br>
-├── .eslintrc.json<br>
-├── .gitignore<br>
-├── README.md<br>
-├── jsconfig.json<br>
-├── next-env.d.ts<br>
-├── next.config.mjs<br>
-├── package-lock.json<br>
-├── package.json<br>
-├── postcss.config.mjs<br>
-├── prisma<br>
-│   ├── dev.db<br>
-│   └── schema.prisma<br>
-├── public<br>
-│   ├── .DS_Store<br>
-│   ├── logo.jpg<br>
-│   ├── no_image.png<br>
-│   └── page-top.jpg<br>
-├── src<br>
-│   ├── app<br>
-│   ├── components<br>
-│   └── lib<br>
-├── tailwind.config.js<br>
-└── tsconfig.json<br>
+<pre>
+.
+├── .DS_Store
+├── .env
+├── .eslintrc.json
+├── .gitignore
+├── README.md
+├── jsconfig.json
+├── next-env.d.ts
+├── next.config.mjs
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── prisma
+│   ├── dev.db
+│   └── schema.prisma
+├── public
+│   ├── .DS_Store
+│   ├── logo.jpg
+│   ├── no_image.png
+│   └── page-top.jpg
+├── src
+│   ├── app
+│   ├── components
+│   └── lib
+├── tailwind.config.js
+└── tsconfig.json
+</pre>

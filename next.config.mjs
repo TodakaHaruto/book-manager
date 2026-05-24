@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
   images: {
     remotePatterns: [
       {
-        hostname: "books.google.com",
+        hostname: 'books.google.com',
       },
     ],
   },

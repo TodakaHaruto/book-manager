@@ -1,13 +1,19 @@
 import prisma from './prisma';
 
 function buildGoogleBooksUrl(path, params = {}) {
-  const searchParams = new URLSearchParams(params);
+  const queryParts = [];
 
-  if (process.env.GOOGLE_BOOKS_API_KEY) {
-    searchParams.append('key', process.env.GOOGLE_BOOKS_API_KEY);
+  for (const key in params) {
+    if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+      queryParts.push(`${key}=${params[key]}`);
+    }
   }
 
-  const queryString = searchParams.toString();
+  if (process.env.GOOGLE_BOOKS_API_KEY) {
+    queryParts.push(`key=${process.env.GOOGLE_BOOKS_API_KEY}`);
+  }
+
+  const queryString = queryParts.join('&');
 
   return queryString
     ? `https://www.googleapis.com/books/v1/${path}?${queryString}`
@@ -45,7 +51,12 @@ export async function getBooksByKeyword(keyword) {
     maxResults: '20',
   });
 
-  console.log('Google Books API URL:', url);
+  console.log(
+    'Google Books API URL:',
+    process.env.GOOGLE_BOOKS_API_KEY
+      ? url.replace(process.env.GOOGLE_BOOKS_API_KEY, 'HIDDEN')
+      : url
+  );
 
   const res = await fetch(url, {
     next: { revalidate: 3600 },

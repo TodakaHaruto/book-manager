@@ -38,12 +38,14 @@ export async function getBooksByKeyword(keyword) {
     return [];
   }
 
+  const trimmedKeyword = q.trim();
+
   const url = buildGoogleBooksUrl('volumes', {
-    q,
+    q: `intitle:${trimmedKeyword}`,
     maxResults: '40',
     printType: 'books',
     langRestrict: 'ja',
-    country: 'JP',
+    orderBy: 'relevance',
   });
 
   const res = await fetch(url, {
@@ -64,10 +66,14 @@ export async function getBooksByKeyword(keyword) {
 
   return result.items
     .filter((b) => b.volumeInfo?.language === 'ja')
+    .filter((b) =>
+      b.volumeInfo?.title
+        ?.toLowerCase()
+        .includes(trimmedKeyword.toLowerCase())
+    )
     .slice(0, 20)
     .map((b) => createBook(b));
 }
-
 export async function getBookById(id) {
   if (!id) {
     return null;

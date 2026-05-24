@@ -45,6 +45,7 @@ export async function getBooksByKeyword(keyword) {
     maxResults: '40',
     printType: 'books',
     langRestrict: 'ja',
+    country: 'JP',
     orderBy: 'relevance',
   });
 
@@ -76,6 +77,12 @@ export async function getBooksByKeyword(keyword) {
     .slice(0, 20)
     .map((b) => createBook(b));
 }
+
+export async function getBookById(id) {
+  if (!id) {
+    return null;
+  }
+
   const url = buildGoogleBooksUrl(`volumes/${id}`);
 
   const res = await fetch(url, {

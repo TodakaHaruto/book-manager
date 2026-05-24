@@ -1,5 +1,19 @@
 import prisma from './prisma';
 
+function buildGoogleBooksUrl(path, params = {}) {
+  const searchParams = new URLSearchParams(params);
+
+  if (process.env.GOOGLE_BOOKS_API_KEY) {
+    searchParams.append('key', process.env.GOOGLE_BOOKS_API_KEY);
+  }
+
+  const queryString = searchParams.toString();
+
+  return queryString
+    ? `https://www.googleapis.com/books/v1/${path}?${queryString}`
+    : `https://www.googleapis.com/books/v1/${path}`;
+}
+
 export function createBook(book) {
   const volumeInfo = book.volumeInfo ?? {};
   const saleInfo = book.saleInfo ?? {};
@@ -24,25 +38,19 @@ export async function getBooksByKeyword(keyword) {
     return [];
   }
 
-  const params = new URLSearchParams({
-    q: q,
+  const url = buildGoogleBooksUrl('volumes', {
+    q,
     maxResults: '20',
     printType: 'books',
   });
 
-  if (process.env.GOOGLE_BOOKS_API_KEY) {
-    params.append('key', process.env.GOOGLE_BOOKS_API_KEY);
-  }
-
-  const url = `https://www.googleapis.com/books/v1/volumes?${params.toString()}`;
-
   const res = await fetch(url, {
-    cache: 'no-store',
+    next: { revalidate: 3600 },
   });
 
   if (!res.ok) {
     const errorText = await res.text();
-    console.error('Google Books API error:', res.status, errorText);
+    console.error('Google Books API search error:', res.status, errorText);
     return [];
   }
 
@@ -56,17 +64,32 @@ export async function getBooksByKeyword(keyword) {
 }
 
 export async function getBookById(id) {
-  const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`);
+  if (!id) {
+    return null;
+  }
+
+  const url = buildGoogleBooksUrl(`volumes/${id}`);
+
+  const res = await fetch(url, {
+    next: { revalidate: 3600 },
+  });
 
   if (!res.ok) {
+    const errorText = await res.text();
+    console.error('Google Books API detail error:', res.status, errorText);
     return null;
   }
 
   const result = await res.json();
+
   return createBook(result);
 }
 
 export async function getReviewById(id) {
+  if (!id) {
+    return null;
+  }
+
   return await prisma.reviews.findUnique({
     where: {
       id: id,

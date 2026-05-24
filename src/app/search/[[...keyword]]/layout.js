@@ -17,7 +17,13 @@ export default function SearchLayout({children}) {
 
 
     const handleSearch = () => {
-        router.push(`/search/${txtKeyword.current.value}`);
+      　const keyword = txtKeyword.current.value.trim();
+    
+      　if (keyword === '') {
+       　 return;
+      　}
+    
+   　   router.push(`/search/${encodeURIComponent(keyword)}`);
     };
 
     return (

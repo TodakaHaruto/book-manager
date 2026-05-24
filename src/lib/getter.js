@@ -1,23 +1,26 @@
 import prisma from './prisma';
 
-function buildGoogleBooksUrl(path, params = {}) {
-  const queryParts = [];
+function buildGoogleBooksSearchUrl(keyword) {
+  let url = 'https://www.googleapis.com/books/v1/volumes';
 
-  for (const key in params) {
-    if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
-      queryParts.push(`${key}=${params[key]}`);
-    }
-  }
+  url = url + '?q=' + keyword;
+  url = url + '&maxResults=20';
 
   if (process.env.GOOGLE_BOOKS_API_KEY) {
-    queryParts.push(`key=${process.env.GOOGLE_BOOKS_API_KEY}`);
+    url = url + '&key=' + process.env.GOOGLE_BOOKS_API_KEY;
   }
 
-  const queryString = queryParts.join('&');
+  return url;
+}
 
-  return queryString
-    ? `https://www.googleapis.com/books/v1/${path}?${queryString}`
-    : `https://www.googleapis.com/books/v1/${path}`;
+function buildGoogleBooksDetailUrl(id) {
+  let url = 'https://www.googleapis.com/books/v1/volumes/' + id;
+
+  if (process.env.GOOGLE_BOOKS_API_KEY) {
+    url = url + '?key=' + process.env.GOOGLE_BOOKS_API_KEY;
+  }
+
+  return url;
 }
 
 export function createBook(book) {
@@ -46,10 +49,7 @@ export async function getBooksByKeyword(keyword) {
 
   const trimmedKeyword = q.trim();
 
-  const url = buildGoogleBooksUrl('volumes', {
-    q: trimmedKeyword,
-    maxResults: '20',
-  });
+  const url = buildGoogleBooksSearchUrl(trimmedKeyword);
 
   console.log(
     'Google Books API URL:',
@@ -87,7 +87,7 @@ export async function getBookById(id) {
     return null;
   }
 
-  const url = buildGoogleBooksUrl(`volumes/${id}`);
+  const url = buildGoogleBooksDetailUrl(id);
 
   const res = await fetch(url, {
     next: { revalidate: 3600 },

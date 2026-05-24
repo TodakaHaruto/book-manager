@@ -41,8 +41,9 @@ export async function getBooksByKeyword(keyword) {
   const trimmedKeyword = q.trim();
 
   const url = buildGoogleBooksUrl('volumes', {
-    q: `intitle:${trimmedKeyword}`,
+    q: trimmedKeyword,
     maxResults: '40',
+    printType: 'books',
   });
 
   const res = await fetch(url, {

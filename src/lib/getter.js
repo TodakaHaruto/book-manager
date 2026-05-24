@@ -1,36 +1,52 @@
-import { Description } from '@mui/icons-material';
 import prisma from './prisma';
 
 export function createBook(book) {
-    const authors = book.volumeInfo.authors;
-    const price = book.saleInfo.listPrice;
-    const img = book.volumeInfo.imageLinks;
-    return {
-        id: book.id,
-        title: book.volumeInfo.title,
-        author: authors ? authors.join(',') : '',
-        price: price ? price.amount : 0,
-        publisher: book.volumeInfo.publisher,
-        published: book.volumeInfo.publishedDate,
-        image: img ? img.smallThumbnail : '/no_image.png',
-    };
+  const volumeInfo = book.volumeInfo ?? {};
+  const saleInfo = book.saleInfo ?? {};
+  const authors = volumeInfo.authors ?? [];
+  const imageLinks = volumeInfo.imageLinks ?? {};
+
+  return {
+    id: book.id,
+    title: volumeInfo.title ?? 'タイトル不明',
+    author: authors.length > 0 ? authors.join(', ') : '著者不明',
+    price: saleInfo.listPrice?.amount ?? 0,
+    publisher: volumeInfo.publisher ?? '出版社不明',
+    published: volumeInfo.publishedDate ?? '発売日不明',
+    image: imageLinks.smallThumbnail ?? imageLinks.thumbnail ?? '/no_image.png',
+  };
 }
 
 export async function getBooksByKeyword(keyword) {
-        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${keyword}&langRestrict=ja&maxResults=20&printType=books`);
-        const result = await res.json();
-        const books = [];
-        if(result.totalItems === 0) {
-            return null;
-        }
-            for (const b of result.items) {
-                books.push(createBook(b));
-                }
-                return books;
+  const q = Array.isArray(keyword) ? keyword.join(' ') : keyword;
+  const encodedKeyword = encodeURIComponent(q);
+
+  const res = await fetch(
+    `https://www.googleapis.com/books/v1/volumes?q=${encodedKeyword}&langRestrict=ja&maxResults=20&printType=books`,
+    { cache: 'no-store' }
+  );
+
+  if (!res.ok) {
+    console.error('Google Books API error:', res.status, await res.text());
+    return null;
+  }
+
+  const result = await res.json();
+
+  if (!result.items || result.items.length === 0) {
+    return null;
+  }
+
+  return result.items.map((b) => createBook(b));
 }
 
 export async function getBookById(id) {
   const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}`);
+
+  if (!res.ok) {
+    return null;
+  }
+
   const result = await res.json();
   return createBook(result);
 }
@@ -38,15 +54,15 @@ export async function getBookById(id) {
 export async function getReviewById(id) {
   return await prisma.reviews.findUnique({
     where: {
-      id: id
-    }
+      id: id,
+    },
   });
 }
 
 export async function getAllReviews() {
   return await prisma.reviews.findMany({
     orderBy: {
-      read: 'desc'
-    }
+      read: 'desc',
+    },
   });
 }

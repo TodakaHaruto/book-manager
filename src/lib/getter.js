@@ -30,26 +30,23 @@ export async function getBooksByKeyword(keyword) {
     printType: 'books',
   });
 
-  const url = `https://www.googleapis.com/books/v1/volumes?${params.toString()}`;
+  if (process.env.GOOGLE_BOOKS_API_KEY) {
+    params.append('key', process.env.GOOGLE_BOOKS_API_KEY);
+  }
 
-  console.log('Google Books API URL:', url);
+  const url = `https://www.googleapis.com/books/v1/volumes?${params.toString()}`;
 
   const res = await fetch(url, {
     cache: 'no-store',
   });
 
-  console.log('Google Books API status:', res.status);
-
   if (!res.ok) {
     const errorText = await res.text();
-    console.error('Google Books API error:', errorText);
+    console.error('Google Books API error:', res.status, errorText);
     return [];
   }
 
   const result = await res.json();
-
-  console.log('Google Books totalItems:', result.totalItems);
-  console.log('Google Books items length:', result.items?.length);
 
   if (!result.items || result.items.length === 0) {
     return [];

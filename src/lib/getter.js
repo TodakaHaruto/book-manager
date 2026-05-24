@@ -43,8 +43,6 @@ export async function getBooksByKeyword(keyword) {
   const url = buildGoogleBooksUrl('volumes', {
     q: `intitle:${trimmedKeyword}`,
     maxResults: '40',
-    langRestrict: 'ja',
-    orderBy: 'relevance',
   });
 
   const res = await fetch(url, {

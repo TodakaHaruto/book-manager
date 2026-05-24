@@ -63,3 +63,6 @@ next.jsによる開発を学習するために作成したアプリケーショ�
 ├── tailwind.config.js
 └── tsconfig.json
 </pre>
+
+## webアプリのURL
+<a href="https://book-manager-production-18f9.up.railway.app/">こちら</a>

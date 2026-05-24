@@ -19,22 +19,40 @@ export function createBook(book) {
 
 export async function getBooksByKeyword(keyword) {
   const q = Array.isArray(keyword) ? keyword.join(' ') : keyword;
-  const encodedKeyword = encodeURIComponent(q);
 
-  const res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${encodedKeyword}&langRestrict=ja&maxResults=20&printType=books`,
-    { cache: 'no-store' }
-  );
+  if (!q || q.trim() === '') {
+    return [];
+  }
+
+  const params = new URLSearchParams({
+    q: q,
+    maxResults: '20',
+    printType: 'books',
+  });
+
+  const url = `https://www.googleapis.com/books/v1/volumes?${params.toString()}`;
+
+  console.log('Google Books API URL:', url);
+
+  const res = await fetch(url, {
+    cache: 'no-store',
+  });
+
+  console.log('Google Books API status:', res.status);
 
   if (!res.ok) {
-    console.error('Google Books API error:', res.status, await res.text());
-    return null;
+    const errorText = await res.text();
+    console.error('Google Books API error:', errorText);
+    return [];
   }
 
   const result = await res.json();
 
+  console.log('Google Books totalItems:', result.totalItems);
+  console.log('Google Books items length:', result.items?.length);
+
   if (!result.items || result.items.length === 0) {
-    return null;
+    return [];
   }
 
   return result.items.map((b) => createBook(b));

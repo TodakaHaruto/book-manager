@@ -43,8 +43,6 @@ export async function getBooksByKeyword(keyword) {
   const url = buildGoogleBooksUrl('volumes', {
     q: trimmedKeyword,
     maxResults: '20',
-    printType: 'books',
-    orderBy: 'relevance',
   });
 
   console.log('Google Books API URL:', url);

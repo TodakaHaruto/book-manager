@@ -40,8 +40,10 @@ export async function getBooksByKeyword(keyword) {
 
   const url = buildGoogleBooksUrl('volumes', {
     q,
-    maxResults: '20',
+    maxResults: '40',
     printType: 'books',
+    langRestrict: 'ja',
+    country: 'JP',
   });
 
   const res = await fetch(url, {
@@ -60,7 +62,10 @@ export async function getBooksByKeyword(keyword) {
     return [];
   }
 
-  return result.items.map((b) => createBook(b));
+  return result.items
+    .filter((b) => b.volumeInfo?.language === 'ja')
+    .slice(0, 20)
+    .map((b) => createBook(b));
 }
 
 export async function getBookById(id) {

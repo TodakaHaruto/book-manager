@@ -44,11 +44,17 @@ export async function getBooksByKeyword(keyword) {
     q: trimmedKeyword,
     maxResults: '40',
     printType: 'books',
+    langRestrict: 'ja',
+    orderBy: 'relevance',
   });
+
+  console.log('Google Books API URL:', url);
 
   const res = await fetch(url, {
     next: { revalidate: 3600 },
   });
+
+  console.log('Google Books API status:', res.status);
 
   if (!res.ok) {
     const errorText = await res.text();
@@ -58,25 +64,18 @@ export async function getBooksByKeyword(keyword) {
 
   const result = await res.json();
 
+  console.log('Google Books totalItems:', result.totalItems);
+  console.log('Google Books items length:', result.items?.length);
+
   if (!result.items || result.items.length === 0) {
     return [];
   }
 
   return result.items
     .filter((b) => b.volumeInfo?.language === 'ja')
-    .filter((b) =>
-      b.volumeInfo?.title
-        ?.toLowerCase()
-        .includes(trimmedKeyword.toLowerCase())
-    )
     .slice(0, 20)
     .map((b) => createBook(b));
 }
-export async function getBookById(id) {
-  if (!id) {
-    return null;
-  }
-
   const url = buildGoogleBooksUrl(`volumes/${id}`);
 
   const res = await fetch(url, {
